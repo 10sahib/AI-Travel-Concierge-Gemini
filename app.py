@@ -1,8 +1,16 @@
+import os
 import streamlit as st
 from google import genai
 
 # Page Configuration
 st.set_page_config(page_title="AI Travel Concierge", page_icon="✈️", layout="centered")
+
+# Initialize the Gemini Client securely using environment variables
+# Note: genai.Client() automatically looks for the GEMINI_API_KEY environment variable.
+try:
+    client = genai.Client()
+except Exception as e:
+    st.error("Failed to initialize Gemini Client. Please check your GEMINI_API_KEY environment variable setting.")
 
 st.title("✈️ Gen AI Academy: AI Travel Concierge")
 st.write("Your autonomous, intelligent getaway and itinerary planner powered by Gemini.")
@@ -37,10 +45,7 @@ if st.button("Generate My Intelligent Itinerary ✨"):
     else:
         with st.spinner("Our AI Concierge is mapping out your perfect trip..."):
             try:
-                # Initialize the modern Google GenAI Client with your key
-                client = genai.Client(api_key="AQ.Ab8RN6IpG6FdJBqRUywGeWwKwEeVsa3bzKK5nG76Mqmc4E3b5w")
-                
-                # Call the correct, modern Gemini 2.5 Flash model
+                # Call the modern Gemini 2.5 Flash model
                 response = client.models.generate_content(
                     model='gemini-2.5-flash',
                     contents=prompt,
@@ -52,4 +57,4 @@ if st.button("Generate My Intelligent Itinerary ✨"):
                 st.markdown("---")
                 
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"An error occurred during generation: {e}")
